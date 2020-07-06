@@ -15,16 +15,16 @@ class TasksController extends Controller
     public function index(Request $request)
     {
         $datatasks = \App\Tasks::all();
-        // $datatasks = DB::table('tasks')
-        //     ->select('tasks.id', 'tasks.nama_tugas', 'tasks.status_pekerjaan', 'tasks.tanggal_mulai', 'tasks.tanggal_akhir', 'tasks.pic_karyawan', 'tasks.keterangan', 'employees.name')
-        //     ->join('employees', 'employees.tugas_id', '=', 'tasks.id')
-        //     ->get();
         return view('tasks.index', compact(['datatasks']));
     }
 
     public function create(Request $request)
     {
         // dd($request);
+        $this->validate($request, [
+            'nama_tugas'    => 'required|min:5',
+            'status_pekerjaan' => 'required|min:5',
+        ]);
         $tasks = \App\Tasks::create($request->all());
         return redirect('/tasks')->with('sukses', 'Data berhasil diinput');
     }
@@ -48,7 +48,7 @@ class TasksController extends Controller
     public function mytasks()
     {
         $datatasks = DB::table('employees')
-            ->select('tasks.id', 'tasks.nama_tugas', 'tasks.status_pekerjaan', 'tasks.tanggal', 'tasks.pic_karyawan', 'tasks.keterangan')
+            ->select('tasks.id', 'tasks.nama_tugas', 'tasks.status_pekerjaan', 'tasks.tanggal_mulai', 'tasks.tanggal_akhir', 'tasks.pic_karyawan', 'tasks.keterangan')
             ->join('tasks', 'tasks.id', '=', 'employees.tugas_id')
             ->where('employees.nip', auth()->user()->id)
             ->get();

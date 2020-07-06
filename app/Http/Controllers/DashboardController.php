@@ -42,6 +42,12 @@ class DashboardController extends Controller
             ->groupby('nama_tugas')
             ->get();
 
-        return view('Dashboard.index', compact(['employeestasks', 'employees', 'status', 'tasksaktifbar']));
+        $admin = DB::table('users')
+            ->select('*')
+            ->where('role', 'Admin')
+            ->get();
+        $admin = $admin->count();
+        // dd($admin->count());
+        return view('Dashboard.index', compact(['employeestasks', 'employees', 'status', 'tasksaktifbar', 'admin']));
     }
 }

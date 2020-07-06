@@ -32,7 +32,7 @@
                                 <div class="metric">
                                     <span class="icon"><i class="fa fa-download"></i></span>
                                     <p>
-                                        <span class="number">{{jumlahTotalPegawai()}}</span>
+                                        <span class="number">{{$admin}}</span>
                                         <span class="title">Admin</span>
                                     </p>
                                 </div>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Employees;
 use App\User;
+use App\Tasks;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -22,12 +23,18 @@ class EmployeesController extends Controller
             ->join('tasks', 'tasks.id', '=', 'employees.tugas_id')
             ->get();
 
-        return view('employees.index', compact(['dataemployees']));
+        $tasks = DB::table('tasks')
+            ->select('tasks.id', 'tasks.nama_tugas')
+            ->get();
+        $selectedIdTasks = \App\Tasks::first()->id_tugas;
+
+        return view('employees.index', compact(['dataemployees', 'tasks', 'selectedIdTasks']));
     }
 
-    public function create(Request $request)
+    public function create(Request $request, Employees $employees)
     {
         // dd($request->all());
+
         $user = new \App\User;
         $user->role = 'pegawai';
         $user->username = $request->name;
@@ -37,10 +44,23 @@ class EmployeesController extends Controller
         // dd($user);
         $user->save();
 
-        $request->request->add(['user_id' => $user->id]);
+        // $request->request->add(['user_id' => $user->id])
         // dd($user);
-        $employees = \App\Employees::create($request->all());
+        $requestid = $user->id;
 
+        $request->nip = 'NIP' . $request->nip;
+        $employees->user_id = $requestid;
+        $employees->nip = $request->nip;
+        $employees->name = $request->name;
+        $employees->status = $request->status;
+        $employees->tanggal_lahir = $request->tanggal_lahir;
+        $employees->email = $request->email;
+        $employees->jenis_kelamin = $request->jenis_kelamin;
+        $employees->alamat = $request->alamat;
+        $employees->tugas_id = $request->tugas_id;
+
+        $employees->save();
+        // dd('NIP' . $request->nip);
         // dd($employees);
         if ($request->hasFile('photo')) {
             $request->file('photo')->move('images/', $request->file('photo')->getClientOriginalName());

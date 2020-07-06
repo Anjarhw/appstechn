@@ -17,7 +17,7 @@
                             <table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>{{__('msg.task name')}}</th>
+                                        <th>NAMA</th>
                                         <th>STATUS PEKERJAAN</th>
                                         <th>TANGGAL MULAI</th>
                                         <th>TANGGAL AKHIR</th>
@@ -31,8 +31,8 @@
                                     <tr>
                                         <td>{{$tasks->nama_tugas}}</td>
                                         <td>{{$tasks->status_pekerjaan}}</td>
-                                        <td>{{$tasks->tanggal_mulai->format('d-m-Y')}}</td>
-                                        <td>{{$tasks->tanggal_akhir->format('d-m-Y')}}</td>
+                                        <td>{{Carbon\Carbon::parse($tasks->tanggal_mulai)->format('d-m-Y')}}</td>
+                                        <td>{{Carbon\Carbon::parse($tasks->tanggal_akhir)->format('d-m-Y')}}</td>
                                         <td>{{$tasks->pic_karyawan}}</td>
                                         <td>{{$tasks->keterangan}}</td>
                                         <td>

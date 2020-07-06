@@ -9,9 +9,8 @@
                     <div class="panel">
                         <div class="panel-heading">
                             <h3 class="panel-title">Data Pegawai </h3>
-
                             <div class="right">
-                                <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal">{{__('msg.add data')}}</a>
+                                <a type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal">Tambah Data</a>
                             </div>
                         </div>
                         <div class="panel-body">
@@ -77,7 +76,7 @@
                                 <label for="Nip">Nip</label>
                             </div>
                             <div class="col-sm-9">
-                                <input name="nip" type="text" class="form-control" id="Nip" placeholder="Nip" value="{{old('nip')}}">
+                                <input name="nip" type="text" class="form-control" id="Nip" placeholder="Nip" value="" onkeypress="return hanyaAngka(event)">
                                 @if($errors->has('nip'))
                                 <span class="help-block">{{$errors->first('nip')}}</span>
                                 @endif
@@ -90,7 +89,7 @@
                                 <label for="Nama">Nama</label>
                             </div>
                             <div class="col-sm-9">
-                                <input name="name" type="text" class="form-control" id="Nama" placeholder="Nama Belakang" value="{{old('nama')}}">
+                                <input name="name" type="text" class="form-control" id="Nama" placeholder="Nama" value="">
                                 @if($errors->has('nama'))
                                 <span class="help-block">{{$errors->first('nama')}}</span>
                                 @endif
@@ -103,7 +102,7 @@
                                 <label for="Status">Status</label>
                             </div>
                             <div class="col-sm-9">
-                                <input name="status" type="text" class="form-control" id="Status" placeholder="Status" value="{{old('status')}}">
+                                <input name="status" type="text" class="form-control" id="Status" placeholder="Status" value="">
                                 @if($errors->has('status'))
                                 <span class=" help-block">{{$errors->first('status')}}</span>
                                 @endif
@@ -116,7 +115,7 @@
                                 <label for="Tanggal Lahir">Tanggal Lahir</label>
                             </div>
                             <div class="col-sm-9">
-                                <input name="tanggal_lahir" type="date" class="form-control" id="Tanggal Lahir" placeholder="Tanggal Lahir" value="{{old('tanggal_lahir')}}">
+                                <input name="tanggal_lahir" type="date" class="form-control" id="Tanggal Lahir" placeholder="Tanggal Lahir" value="">
                                 @if($errors->has('tanggal_lahir'))
                                 <span class=" help-block">{{$errors->first('tanggal_lahir')}}</span>
                                 @endif
@@ -129,7 +128,7 @@
                                 <label for="Email">Email</label>
                             </div>
                             <div class="col-sm-9">
-                                <input name="email" type="email" class="form-control" id="Email" placeholder="Email" value="{{old('email')}}">
+                                <input name="email" type="email" class="form-control" id="Email" placeholder="Email" value="">
                                 @if($errors->has('email'))
                                 <span class=" help-block">{{$errors->first('email')}}</span>
                                 @endif
@@ -171,7 +170,7 @@
                                 <label for="Alamat">Alamat</label>
                             </div>
                             <div class="col-sm-9">
-                                <textarea name="alamat" class="form-control" id="Alamat" rows="3" value="{{old('alamat')}}"></textarea>
+                                <textarea name="alamat" class="form-control" id="Alamat" rows="3" value=""></textarea>
                             </div>
                         </div>
                     </div>
@@ -182,8 +181,10 @@
                             </div>
                             <div class="col-sm-9">
                                 <select name="tugas_id" id="tugas_id" class="form-control">
-                                    <option value="1">Test0</option>
-                                    <option value="2">Test1</option>
+                                    <option value="0" selected="true">Pilih Tugas</option>
+                                    @foreach($tasks as $key)
+                                    <option value="{{$key->nama_tugas}}" {{$key->id == $selectedIdTasks ? 'selected="selected"' : ''}}>{{$key->nama_tugas}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -210,5 +211,13 @@
     $(document).ready(function() {
         $('#example').DataTable();
     });
+
+    function hanyaAngka(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+
+            return false;
+        return true;
+    }
 </script>
 @stop
