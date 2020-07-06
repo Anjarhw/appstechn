@@ -76,15 +76,19 @@
                                         <div class="form-group">
                                             <label for="Nama Tugas">Tugas</label>
                                             <select name="tugas_id" id="tugas_id" class="form-control">
-                                                <option value="1" @if($employees->id_tugas == 1) selected @endif>Test0</option>
-                                                <option value="2" @if($employees->id_tugas == 2) selected @endif>Test1</option>
+                                                <!-- <option value="1" @if($employees->id_tugas == 1) selected @endif>Test0</option>
+                                                <option value="2" @if($employees->id_tugas == 2) selected @endif>Test1</option> -->
+                                                <option value="0" selected="true">Pilih Tugas</option>
+                                                @foreach($tasks as $key)
+                                                <option value="{{$key->id}}" {{$key->id == $selectedIdTasks ? 'selected="selected"' : ''}} @if($employees->tugas_id == $key->id) selected @endif>{{$key->nama_tugas}}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="Role">Role</label>
                                             <select name="role" id="role" class="form-control">
-                                                <option value="admin">Admin</option>
-                                                <option value="pegawai">Pegawai</option>
+                                                <option value="admin" @if($takerole->role =='admin' ) selected @endif>Admin</option>
+                                                <option value="pegawai" @if($takerole->role =='pegawai' ) selected @endif>Pegawai</option>
                                             </select>
                                         </div>
                                     </div>

@@ -69,17 +69,28 @@ class EmployeesController extends Controller
         }
         return redirect('/employees')->with('sukses', 'Data berhasil diinput');
     }
-    public function edit(Employees $employees)
+    public function edit(Employees $employees, User $user)
     {
         // return view('employees.edit', compact(['Employees']));
         // dd($employees);
         // dd($employees->alamat);
+        // dd($employees);
         $date = $employees->tanggal_lahir->format('Y-m-d');
-        return view('employees/edit', compact(['employees', 'date']));
+        $tasks = DB::table('tasks')
+            ->select('tasks.id', 'tasks.nama_tugas')
+            ->get();
+        $selectedIdTasks = \App\Tasks::first()->id;
+        $takerole = DB::table('users')
+            ->select('users.role', 'users.username')
+            ->join('employees', 'users.id', '=', 'employees.user_id')
+            ->where('users.id', $employees->user_id)
+            ->first();
+        // $takerole = $user->role;
+        return view('employees/edit', compact(['employees', 'date', 'tasks', 'selectedIdTasks', 'takerole']));
     }
     public function update(Request $request, Employees $employees, User $user)
     {
-        // dd($employees);
+        // dd($request);
         $employees->nip = $request->nip;
         $employees->name = $request->name;
         $employees->status = $request->status;
@@ -88,7 +99,7 @@ class EmployeesController extends Controller
         $employees->jenis_kelamin = $request->jenis_kelamin;
         $employees->alamat = $request->alamat;
         $employees->tugas_id = $request->tugas_id;
-
+        // dd($request->tugas_id);
         if ($request->hasFile('photo')) {
             $request->file('photo')->move('images/', $request->file('photo')->getClientOriginalName());
             $employees->photo = $request->file('photo')->getClientOriginalName();
@@ -97,13 +108,12 @@ class EmployeesController extends Controller
         $employees->update();
         // dd($employees);
 
-        $user->id = $employees->id_user;
-
+        $user->id = $employees->user_id;
         // dd($user->id, $request->role);
         $user = DB::table('users')
             ->where('id', $user->id)
             ->update(['role' => $request->role]);
-
+        // dd($user);
         return redirect('/employees')->with('sukses', 'Data berhasil diupdate');
     }
 

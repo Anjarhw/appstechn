@@ -36,9 +36,9 @@ Route::group(['middleware' => ['auth', 'CheckRole:admin,pegawai']], function () 
 Route::group(['middleware' => ['auth', 'CheckRole:admin']], function () {
     Route::get('/employees', 'EmployeesController@index');
     Route::post('/employees/create', 'EmployeesController@create');
-    Route::get('/employees/{employees}/{locale}/edit', 'EmployeesController@edit');
-    Route::post('/employees/{employees}/{locale}/update', 'EmployeesController@update');
-    Route::get('/employees/{employees}/{locale}/delete', 'EmployeesController@delete');
+    Route::get('/employees/{employees}/edit', 'EmployeesController@edit');
+    Route::post('/employees/{employees}/update', 'EmployeesController@update');
+    Route::get('/employees/{employees}/delete', 'EmployeesController@delete');
 
 
     Route::get('/tasks', 'TasksController@index');
@@ -46,8 +46,6 @@ Route::group(['middleware' => ['auth', 'CheckRole:admin']], function () {
     Route::get('/tasks/{tasks}/edit', 'TasksController@edit');
     Route::post('/tasks/{tasks}/update', 'TasksController@update');
     Route::get('/tasks/{tasks}/delete', 'TasksController@delete');
-
-    Route::get('/setuser', 'SettingController@index');
 });
 
 Route::group(['middleware' => ['auth', 'CheckRole:pegawai']], function () {

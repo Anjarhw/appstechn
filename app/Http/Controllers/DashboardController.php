@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use Employees;
+use User;
 
 class DashboardController extends Controller
 {
@@ -43,9 +44,11 @@ class DashboardController extends Controller
             ->get();
 
         $admin = DB::table('users')
-            ->select('*')
+            ->select('users.username')
             ->where('role', 'Admin')
             ->get();
+        // $admin = \App\User::all();
+        // dd($admin);
         $admin = $admin->count();
         // dd($admin->count());
         return view('Dashboard.index', compact(['employeestasks', 'employees', 'status', 'tasksaktifbar', 'admin']));
