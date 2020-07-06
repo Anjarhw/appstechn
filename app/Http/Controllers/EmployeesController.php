@@ -1,0 +1,96 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+use App\Employees;
+use App\User;
+
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use App;
+
+class EmployeesController extends Controller
+{
+    public function index(Request $request)
+    {
+        // $dataemployees = \App\Employees::all();
+        $dataemployees = DB::table('employees')
+            ->select('employees.id', 'employees.nip', 'employees.name', 'employees.status', 'employees.tanggal_lahir', 'employees.email', 'employees.photo', 'employees.jenis_kelamin', 'employees.alamat', 'tasks.nama_tugas')
+            ->join('tasks', 'tasks.id', '=', 'employees.tugas_id')
+            ->get();
+
+        return view('employees.index', compact(['dataemployees']));
+    }
+
+    public function create(Request $request)
+    {
+        // dd($request->all());
+        $user = new \App\User;
+        $user->role = 'pegawai';
+        $user->username = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt('rahasia');
+        $user->remember_token = Str::random(60);
+        // dd($user);
+        $user->save();
+
+        $request->request->add(['user_id' => $user->id]);
+        // dd($user);
+        $employees = \App\Employees::create($request->all());
+
+        // dd($employees);
+        if ($request->hasFile('photo')) {
+            $request->file('photo')->move('images/', $request->file('photo')->getClientOriginalName());
+            $employees->photo = $request->file('photo')->getClientOriginalName();
+            $employees->save();
+        }
+        return redirect('/employees')->with('sukses', 'Data berhasil diinput');
+    }
+    public function edit(Employees $employees)
+    {
+        // return view('employees.edit', compact(['Employees']));
+        // dd($employees);
+        // dd($employees->alamat);
+        $date = $employees->tanggal_lahir->format('Y-m-d');
+        return view('employees/edit', compact(['employees', 'date']));
+    }
+    public function update(Request $request, Employees $employees, User $user)
+    {
+        // dd($employees);
+        $employees->nip = $request->nip;
+        $employees->name = $request->name;
+        $employees->status = $request->status;
+        $employees->tanggal_lahir = $request->tanggal_lahir;
+        $employees->email = $request->email;
+        $employees->jenis_kelamin = $request->jenis_kelamin;
+        $employees->alamat = $request->alamat;
+        $employees->tugas_id = $request->tugas_id;
+
+        if ($request->hasFile('photo')) {
+            $request->file('photo')->move('images/', $request->file('photo')->getClientOriginalName());
+            $employees->photo = $request->file('photo')->getClientOriginalName();
+            $employees->save();
+        }
+        $employees->update();
+        // dd($employees);
+
+        $user->id = $employees->id_user;
+
+        // dd($user->id, $request->role);
+        $user = DB::table('users')
+            ->where('id', $user->id)
+            ->update(['role' => $request->role]);
+
+        return redirect('/employees')->with('sukses', 'Data berhasil diupdate');
+    }
+
+    public function delete(Employees $employees)
+    {
+        // dd($employees);
+        $employees->delete($employees);
+        return redirect('/employees')->with('sukses', 'Data berhasil dihapus');
+    }
+}
