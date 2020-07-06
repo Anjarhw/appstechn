@@ -12,7 +12,6 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // $employees = \App\Employees::all();
         // for data pegawai aktif dan tugas aktif
         $employeestasks = DB::table('employees')
             ->select('employees.name', 'status', 'tasks.nama_tugas', 'keterangan')
