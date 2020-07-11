@@ -31,8 +31,14 @@ class TasksController extends Controller
     public function edit(Tasks $tasks)
     {
         // dd($tasks);
-        $date = $tasks->tanggal->format('Y-m-d');
-        return view('tasks/edit', compact(['tasks', 'date']));
+        $date = $tasks->tanggal_mulai;
+        $date1 = $tasks->tanggal_akhir;
+        // dd($date);
+        // dd($date1);
+        // ->format('Y-m-d');
+
+        // Carbon\Carbon::parse($employees->tanggal_lahir)->format('d-m-Y')
+        return view('tasks/edit', compact(['tasks', 'date', 'date1']));
     }
     public function update(Request $request, Tasks $tasks)
     {
@@ -50,7 +56,7 @@ class TasksController extends Controller
         $datatasks = DB::table('employees')
             ->select('tasks.id', 'tasks.nama_tugas', 'tasks.status_pekerjaan', 'tasks.tanggal_mulai', 'tasks.tanggal_akhir', 'tasks.pic_karyawan', 'tasks.keterangan')
             ->join('tasks', 'tasks.id', '=', 'employees.tugas_id')
-            ->where('employees.nip', auth()->user()->id)
+            ->where('employees.user_id', auth()->user()->id)
             ->get();
         // dd($datatasks);
         return view('tasks.my.index', compact(['datatasks']));

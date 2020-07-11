@@ -26,7 +26,7 @@
                                     <tr>
                                         <td>{{$tasks->nama_tugas}}</td>
                                         <td>{{$tasks->status_pekerjaan}}</td>
-                                        <td>{{$tasks->tanggal}}</td>
+                                        <td>{{Carbon\Carbon::parse($tasks->tanggal_mulai)->format('d-m-Y')}}</td>
                                         <td>{{$tasks->pic_karyawan}}</td>
                                         <td>{{$tasks->keterangan}}</td>
                                     </tr>

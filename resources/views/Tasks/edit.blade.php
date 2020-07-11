@@ -40,8 +40,15 @@
                                             @endif
                                         </div>
                                         <div class=" form-group{{$errors->has('tanggal') ? ' has-error' : ''}}">
-                                            <label for="Tanggal">Tanggal</label>
-                                            <input name="tanggal" type="date" class="form-control" id="Tanggal" value="{{$date}}">
+                                            <label for="Tanggal">Tanggal Mulai</label>
+                                            <input name="tanggal_mulai" type="date" class="form-control" id="Tanggal Mulai" value="{{$date}}">
+                                            @if($errors->has('tanggal'))
+                                            <span class=" help-block">{{$errors->first('tanggal')}}</span>
+                                            @endif
+                                        </div>
+                                        <div class=" form-group{{$errors->has('tanggal') ? ' has-error' : ''}}">
+                                            <label for="Tanggal">Tanggal Akhir</label>
+                                            <input name="tanggal_akhir" type="date" class="form-control" id="Tanggal Akhir" value="{{$date1}}">
                                             @if($errors->has('tanggal'))
                                             <span class=" help-block">{{$errors->first('tanggal')}}</span>
                                             @endif
